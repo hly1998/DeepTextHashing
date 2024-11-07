@@ -1,0 +1,12 @@
+python NASH.py --dataset ng20.tfidf --bit 8
+python NASH.py --dataset ng20.tfidf --bit 16
+python NASH.py --dataset ng20.tfidf --bit 32
+python NASH.py --dataset ng20.tfidf --bit 64
+python NASH.py --dataset agnews.tfidf --bit 8
+python NASH.py --dataset agnews.tfidf --bit 16
+python NASH.py --dataset agnews.tfidf --bit 32
+python NASH.py --dataset agnews.tfidf --bit 64
+python NASH.py --dataset reuters.tfidf --bit 8
+python NASH.py --dataset reuters.tfidf --bit 16
+python NASH.py --dataset reuters.tfidf --bit 32
+python NASH.py --dataset reuters.tfidf --bit 64

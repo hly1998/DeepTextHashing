@@ -1,0 +1,11 @@
+datasets/agnews/
+datasets/reuters/
+datasets/dbpedia/
+datasets/ng20/
+datasets/nyt/
+datasets/yahooanswer/
+datasets/metadata/
+delete_file/
+checkpoints/
+logs/
+models/NbrReg/neighbor_data/
