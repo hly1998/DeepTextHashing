@@ -1,6 +1,6 @@
 import os
 import sys
-os.environ['CUDA_VISIBLE_DEVICES'] = "3"
+os.environ['CUDA_VISIBLE_DEVICES'] = "6"
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.insert(0, project_root)
 
@@ -158,9 +158,32 @@ class SMASH(nn.Module):
     def get_name(self):
         return "SMASH"
 
+    # def get_binary_code(self, train, test):
+    #     train_zy = [(self.encode(xb.cuda()), yb)
+    #                 for xb, _, yb in train]
+    #     train_z, train_y = zip(*train_zy)
+    #     train_z = torch.cat(train_z, dim=0)
+    #     train_y = torch.cat(train_y, dim=0)
+
+    #     test_zy = [(self.encode(xb.cuda()), yb) for xb, _, yb in test]
+    #     test_z, test_y = zip(*test_zy)
+    #     test_z = torch.cat(test_z, dim=0)
+    #     test_y = torch.cat(test_y, dim=0)
+
+    #     mid_val, _ = torch.median(train_z, dim=0)
+
+    #     # train_b = (train_z > mid_val).type(torch.cuda.ByteTensor)
+    #     # test_b = (test_z > mid_val).type(torch.cuda.ByteTensor)
+    #     train_b = (train_z > mid_val).float()
+    #     test_b = (test_z > mid_val).float()
+        
+    #     del train_z
+    #     del test_z
+
+    #     return train_b, test_b, train_y, test_y
+
     def get_binary_code(self, train, test):
-        train_zy = [(self.encode(xb.cuda()), yb)
-                    for xb, _, yb in train]
+        train_zy = [(self.encode(xb.cuda()), yb) for xb, _, yb in train]
         train_z, train_y = zip(*train_zy)
         train_z = torch.cat(train_z, dim=0)
         train_y = torch.cat(train_y, dim=0)
@@ -171,12 +194,9 @@ class SMASH(nn.Module):
         test_y = torch.cat(test_y, dim=0)
 
         mid_val, _ = torch.median(train_z, dim=0)
+        train_b = (train_z > mid_val).type(torch.cuda.ByteTensor)
+        test_b = (test_z > mid_val).type(torch.cuda.ByteTensor)
 
-        # train_b = (train_z > mid_val).type(torch.cuda.ByteTensor)
-        # test_b = (test_z > mid_val).type(torch.cuda.ByteTensor)
-        train_b = (train_z > mid_val).float()
-        test_b = (test_z > mid_val).float()
-        
         del train_z
         del test_z
 
@@ -278,14 +298,12 @@ def train_val(config):
     model.cuda()
     # optimizer = config["optimizer"]["type"](model.parameters(), lr=config["optimizer"]["optim_params"]["lr"])
     optimizer = optim.Adam(model.parameters(), lr=config["lr"])
-
-    if dataset == 'ng20':
-        scheduler = torch.optim.lr_scheduler.StepLR(optimizer,
-                                                    step_size=5e3,
-                                                    gamma=0.96)
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer,
+                                                step_size=5e3,
+                                                gamma=0.96)
     L_max = 0
     L_t_minus_1 = 0
-    transfrom_flag = False
+    transfrom_flag = True
     # logging
     logging.basicConfig(
         level=logging.INFO,  # 设置日志级别
@@ -293,7 +311,7 @@ def train_val(config):
         filename='./grid_search_results/data:{}_bit:{}_lr:{}_lsc_weight:{}_bb_weight:{}_bd_weight:{}_em_alpha:{}_sigma:{}_n_sample:{}.log'.format(config["dataset"], config["bit"], config["lr"], config["lsc_weight"], config["bb_weight"],config["bd_weight"],config["em_alpha"],config["sigma"],config["n_sample"]),  # 设置日志文件名
         filemode='w'  # 设置写入模式为覆盖
     )
-   
+    
     for epoch in tqdm(range(config["epoch"])):
         total_loss = []
         reconstr_loss = []
@@ -336,12 +354,14 @@ def train_val(config):
             L_max = np.mean(total_loss)
 
         with torch.no_grad():
-            train_b, test_b, train_y, test_y = model.get_binary_code(train_loader, test_loader)
+            # train_b, test_b, train_y, test_y = model.get_binary_code(train_loader, test_loader)
             # print(train_y)
             # retrieved_indices = retrieve_topk(test_b.cuda(), train_b.cuda(), topK=100)
             # prec = compute_precision_at_k(retrieved_indices, test_y.cuda(), train_y.cuda(), topK=100, is_single_label=single_label_flag)
-            prec = compute_precision_at_k_fast(test_b.cuda(), train_b.cuda(), test_y.cuda(), train_y.cuda(), topK=100)
-            
+            # prec = compute_precision_at_k_fast(test_b.cuda(), train_b.cuda(), test_y.cuda(), train_y.cuda(), topK=100)
+            train_b, val_b, train_y, val_y = model.get_binary_code(train_loader, test_loader)
+            retrieved_indices = retrieve_topk(val_b.cuda(), train_b.cuda(), topK=100)
+            prec = compute_precision_at_k(retrieved_indices, val_y.cuda(), train_y.cuda(), topK=100, is_single_label=single_label_flag)
             # if prec.item() > best_precision:
             if prec > best_precision:
                 best_precision = prec

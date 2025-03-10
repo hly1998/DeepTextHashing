@@ -4,6 +4,8 @@ datasets/dbpedia/
 datasets/ng20/
 datasets/nyt/
 datasets/yahooanswer/
+datasets/rcv1/
+datasets/TMC/
 datasets/metadata/
 delete_file/
 checkpoints/

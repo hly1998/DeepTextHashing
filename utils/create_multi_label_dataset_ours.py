@@ -75,6 +75,31 @@ if args.dataset == 'reuters':
     test_tags = csr_matrix(test_tags, dtype='int')
     print('num train:{} num test:{} num tags:{}'.format(train_tags.shape[0], test_tags.shape[0], train_tags.shape[1]))
 
+elif args.dataset == 'tmc':
+    # data_dir = os.path.join(home, 'datasets/tmc')
+    data_dir = "../datasets/tmc"
+
+    train_docs = []
+    with open(os.path.join(data_dir, 'TrainingData.txt')) as text_data:
+        for i, line in enumerate(text_data):
+            train_docs.append(line.strip()[2:])
+        
+    test_docs = []
+    with open(os.path.join(data_dir, 'TestData.txt')) as text_data:
+        for i, line in enumerate(text_data):
+            test_docs.append(line.strip()[2:])
+            
+    with open(os.path.join(data_dir, 'TrainCategoryMatrix.csv')) as handle:
+        y_train = [[(int(v)+1)//2 for v in line.strip().split(',')] for line in handle]
+        y_train = np.array(y_train)
+        train_tags = csr_matrix(y_train)
+
+    with open(os.path.join(data_dir, 'TestTruth.csv')) as handle:
+        y_test = [[(int(v)+1)//2 for v in line.strip().split(',')] for line in handle]
+        y_test = np.array(y_test)
+        test_tags = csr_matrix(y_test)
+    
+    print('num train:{} num test:{} num tags:{}'.format(train_tags.shape[0], test_tags.shape[0], train_tags.shape[1]))
 
 ##################################################################################################
 

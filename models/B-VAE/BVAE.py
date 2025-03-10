@@ -1,6 +1,6 @@
 import os
 import sys
-os.environ['CUDA_VISIBLE_DEVICES'] = "3"
+os.environ['CUDA_VISIBLE_DEVICES'] = "6"
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.insert(0, project_root)
 
@@ -13,20 +13,32 @@ from torch.nn import Parameter
 from tqdm import tqdm
 from utils.utils import *
 from utils.datasets import *
+import argparse
+import logging
 
 set_seed()
 
-def get_config():
-    config = {
-        "dataset": "ng20.tfidf",
-        "bit": 32,
-        "dropout": 0.1,
-        "batch_size": 64,
-        "epoch": 300,
-        "optimizer": {"type": optim.Adam, "optim_params": {"lr": 0.001}},
-        "stop_iter": 50
-    }
-    return config
+def get_argparser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--dataset', type=str, default='ng20.tfidf')
+    parser.add_argument('--lr', type=float, default=0.01)
+    parser.add_argument('--batch_size', type=int, default=64)
+    parser.add_argument('--bit', type=int, default=8)
+    parser.add_argument('--epoch', type=int, default=300)
+    parser.add_argument('--stop_iter', type=int, default=50, help='控制在效果没有提升多少次后停止运行')
+    return parser
+
+# def get_config():
+#     config = {
+#         "dataset": "ng20.tfidf",
+#         "bit": 32,
+#         "dropout": 0.1,
+#         "batch_size": 64,
+#         "epoch": 300,
+#         "optimizer": {"type": optim.Adam, "optim_params": {"lr": 0.001}},
+#         "stop_iter": 50
+#     }
+#     return config
 
 import torch
 import torch.nn as nn
@@ -168,12 +180,22 @@ def train_val(config):
     num_features = train_set[0][0].size(0)
     model = BVAE(num_features, bit)
     model.cuda()
-    optimizer = config["optimizer"]["type"](model.parameters(), lr=config["optimizer"]["optim_params"]["lr"])
+    # optimizer = config["optimizer"]["type"](model.parameters(), lr=config["optimizer"]["optim_params"]["lr"])
+    optimizer = optim.Adam(model.parameters(), lr=config["lr"])
     best_precision = 0
     prec = 0 
     best_precision_epoch = 0
 
     step_count = 0
+
+    # logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        filename='../../logs/BVAE/data:{}_bit:{}.log'.format(config["dataset"], config["bit"]),
+        filemode='w'
+    )
+
     for epoch in tqdm(range(config["epoch"])):
         avg_loss = []
         for step, (xb, yb) in enumerate(train_loader):
@@ -192,6 +214,19 @@ def train_val(config):
             optimizer.step()
             avg_loss.append(loss.item())
             
+        # with torch.no_grad():
+        #     train_b, test_b, train_y, test_y = model.get_binary_code(train_loader, test_loader)
+        #     retrieved_indices = retrieve_topk(test_b.cuda(), train_b.cuda(), topK=100)
+        #     prec = compute_precision_at_k(retrieved_indices, test_y.cuda(), train_y.cuda(), topK=100, is_single_label=single_label_flag)
+        #     if prec.item() > best_precision:
+        #         best_precision = prec.item()
+        #         best_precision_epoch = epoch + 1
+        #         step_count = 0
+        #     else:
+        #         step_count += 1
+        #     if step_count >= config["stop_iter"]:
+        #         break
+        
         with torch.no_grad():
             train_b, test_b, train_y, test_y = model.get_binary_code(train_loader, test_loader)
             retrieved_indices = retrieve_topk(test_b.cuda(), train_b.cuda(), topK=100)
@@ -200,12 +235,26 @@ def train_val(config):
                 best_precision = prec.item()
                 best_precision_epoch = epoch + 1
                 step_count = 0
+                torch.save(model, '../../checkpoints/BVAE/dataset:{}_bit:{}.pth'.format(dataset, bit))
             else:
                 step_count += 1
             if step_count >= config["stop_iter"]:
                 break
+
         tqdm.write(f'Epoch {epoch+1}/{config["epoch"]} - Current Precision: {prec.item():.4f} - Best Precision: {best_precision:.4f} [{best_precision_epoch}]')
+        logging.info(f'Epoch {epoch+1}/{config["epoch"]} - Current Precision: {prec:.4f} - Best Precision: {best_precision:.4f} [{best_precision_epoch}]')
+
+    model = torch.load('../../checkpoints/BVAE/dataset:{}_bit:{}.pth'.format(dataset, bit))
+    model.eval()
+    with torch.no_grad():
+        train_b, test_b, train_y, test_y = model.get_binary_code(train_loader, test_loader)
+        retrieved_indices = retrieve_topk(test_b.cuda(), train_b.cuda(), topK=100)
+        prec = compute_precision_at_k(retrieved_indices, test_y.cuda(), train_y.cuda(), topK=100, is_single_label=single_label_flag)
+        print(f'Test Precision: {prec:.4f}')
+        logging.info(f'Test Precision: {prec:.4f}')
 
 if __name__ == "__main__":
-    config = get_config()
+    argparser = get_argparser()
+    args = argparser.parse_args()
+    config = vars(args)
     train_val(config)

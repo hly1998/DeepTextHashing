@@ -1,6 +1,6 @@
 import os
 import sys
-os.environ['CUDA_VISIBLE_DEVICES'] = "3"
+os.environ['CUDA_VISIBLE_DEVICES'] = "5"
 
 import numpy as np
 import os
@@ -17,7 +17,7 @@ import argparse
 
 def get_config():
     config = {
-        "dataset": "reuters",
+        "dataset": "tmc",
         "usetrain": True,
     }
     return config
