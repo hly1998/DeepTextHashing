@@ -24,7 +24,7 @@ This repository offers a carefully curated selection of research papers centered
 |  ![](https://img.shields.io/badge/SemanticExtraction-SFR-brightgreen) |  Learning semantic from relevance |
 |  ![](https://img.shields.io/badge/CodeQuality-CB-red) |  Promoting code balance |
 |  ![](https://img.shields.io/badge/CodeQuality-FE-red) |  Promoting few-bit code |
-|  ![](https://img.shields.io/badge/CodeQuality-Quan(X)-red) |  Using quantization method (X could be Loss: quantization loss, Sgn: Signum function, Sigmoid: Sigmoid function, Tanh: Tanh function, Stanh: The scaled tanh function) |
+|  ![](https://img.shields.io/badge/CodeQuality-Quan(X)-red) |  Using quantization method (X could be Loss: quantization loss, Sgn: Signum function, Sigmoid: Sigmoid function, Tanh: Tanh function, STanh: The scaled tanh function) |
 |  ![](https://img.shields.io/badge/OtherTechnology-Robustness-yellow) |  Promoting the robustness of hash codes |
 |  ![](https://img.shields.io/badge/OtherTechnology-Gradient-yellow) |  Optimization of gradients during the backpropagation process in discrete layers. |
 |  ![](https://img.shields.io/badge/OtherTechnology-Index-yellow) |  Adaptation to hashing index |
@@ -34,11 +34,48 @@ This repository offers a carefully curated selection of research papers centered
 [Paper](https://ieeexplore.ieee.org/abstract/document/10889846).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(B),SFC,SFR-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-CB,Quan(Sgn)-red)
+
 + **Document Hashing with Multi-Grained Prototype-Induced Hierarchical Generative Model.** In **EMNLP'2024** [Paper](https://aclanthology.org/2024.findings-emnlp.18.pdf).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(G),MMI,Pse-brightgreen)
 
++ **Efficient similar exercise retrieval model based on unsupervised semantic hashing.** In **JCA'2024** \
+![](https://img.shields.io/badge/SemanticExtraction-MMI,Pse,Pse-brightgreen)
+![](https://img.shields.io/badge/CodeQuality-CB,Quan(STanh)-red)
+
++ **Towards Efficient Coarse-grained Dialogue Response Selection.** In **TOIS'2023** [Paper](https://dl.acm.org/doi/abs/10.1145/3597609).\
+![](https://img.shields.io/badge/SemanticExtraction-SFR-brightgreen)
+
++ **An efficient and robust semantic hashing framework for similar text search.** In **TOIS'2023** [Paper](http://staff.ustc.edu.cn/~qiliuql/files/Publications/Liyang-He-TOIS22.pdf) [Code](https://github.com/hly1998/SMASH).\
+![](https://img.shields.io/badge/SemanticExtraction-Rec-brightgreen)
+![](https://img.shields.io/badge/CodeQuality-CB,FE,Quan(Tanh)-red)
+![](https://img.shields.io/badge/OtherTechnology-Robustness-yellow)
+
++ **Exploiting Multiple Features for Hash Codes Learning with Semantic-Alignment-Promoting Variational Auto-encoder.** In **NLPCC'2023** [Paper](https://link.springer.com/chapter/10.1007/978-3-031-44693-1_44). \
+![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(B),Pse-brightgreen)
+![](https://img.shields.io/badge/CodeQuality-CB,Quan(Sgn)-red)
+
++ **Intra-category aware hierarchical supervised document hashing.** In **TKDE'2022** [Paper](https://ieeexplore.ieee.org/abstract/document/9740429).\
+![](https://img.shields.io/badge/SemanticExtraction-Rec,SFR-brightgreen)
+![](https://img.shields.io/badge/CodeQuality-Quan(Loss),Quan(STanh)-red)
+
++ **Accelerating code search with deep hashing and code classification.** In **ACL'2022** [Paper](https://arxiv.org/pdf/2203.15287).\
+![](https://img.shields.io/badge/SemanticExtraction-SFR-brightgreen)
+![](https://img.shields.io/badge/CodeQuality-Quan(STanh)-red)
+
++ **LASH: Large-scale academic deep semantic hashing.** In **TKDE'2021** [Paper](https://ieeexplore.ieee.org/abstract/document/9529077/).\
+![](https://img.shields.io/badge/SemanticExtraction-Rec,SFR-brightgreen)
+![](https://img.shields.io/badge/CodeQuality-Quan(STanh)-red)
+
++ **Efficient passage retrieval with hashing for open-domain question answering.** In **ACL'2021** [Paper](https://arxiv.org/pdf/2106.00882) [Code](https://github.com/studio-ousia/bpr).\
+![](https://img.shields.io/badge/SemanticExtraction-SFR-brightgreen)
+![](https://img.shields.io/badge/CodeQuality-Quan(STanh)-red)
+
++ **Refining BERT embeddings for document hashing via mutual information maximization.** In **EMNLP'2021** [Paper](https://arxiv.org/pdf/2109.02867) [Code](https://github.com/J-zin/DHIM).\
+![](https://img.shields.io/badge/SemanticExtraction-MMI-brightgreen)
+![](https://img.shields.io/badge/CodeQuality-CB,Quan(Sgn)-red)
+
 ## Datasets
-Here, we have compiled a selection of widely utilized benchmark datasets for text hashing research. These datasets span diverse domains and exhibit a range of characteristics in terms of scale, label types, and download link. For a detailed introduction to the dataset, please refer to our survey.
+We have compiled a selection of widely utilized benchmark datasets for text hashing research. These datasets span diverse domains and exhibit a range of characteristics in terms of scale, label types, and download link. For a detailed introduction to the dataset, please refer to our survey.
 
 
 |  Datasets | Instance | Categories | Single-/Multi-Label |    Link |
