@@ -79,127 +79,127 @@ This repository offers a carefully curated selection of research papers centered
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(GA)-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-Quan(Sigmoid)-red)
 
-+ **Unsupervised multi-index semantic hashing.**In **WWW'2021**
++ **Unsupervised multi-index semantic hashing.** In **WWW'2021**
 [Paper](https://arxiv.org/pdf/2103.14460) [Code](https://github.com/Varyn/MISH).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(B),Pse-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-CB,Quan(Sgn)-red)
-![](https://img.shields.io/badge/OtherTechnology-Adaptation_to_index-yellow)
+![](https://img.shields.io/badge/OtherTechnology-Index-yellow)
 
-+ **Self-supervised bernoulli autoencoders for semi-supervised hashing.**In **CIARP'2021**
++ **Self-supervised bernoulli autoencoders for semi-supervised hashing.** In **CIARP'2021**
 [Paper](https://arxiv.org/pdf/2007.08799) [Code](https://github.com/amacaluso/SSB-VAE).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(B),SFC,SFR-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-CB,Quan(Sgn)-red)
 
-+ **Conditional text hashing utilizing pair-wise multi class labels.**In **ICICEL'2020**
++ **Conditional text hashing utilizing pair-wise multi class labels.** In **ICICEL'2020**
 [Paper](http://www.icicel.org/ell/contents/2020/4/el-14-04-13.pdf).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(G),SFR-brightgreen)
 
-+ **Discrete wasserstein autoencoders for document retrieval.**In **ICASSP'2020**
++ **Discrete wasserstein autoencoders for document retrieval.** In **ICASSP'2020**
 [Paper](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9053129).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-CB-red)
 
-+ **Pairwise supervised hashing with Bernoulli variational auto-encoder and self-control gradient estimator.**In **UAI'2020**
++ **Pairwise supervised hashing with Bernoulli variational auto-encoder and self-control gradient estimator.** In **UAI'2020**
 [Paper](https://arxiv.org/pdf/2005.10477).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(B),SFR-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-CB,Quan(Sgn)-red)
-![](https://img.shields.io/badge/OtherTechnology-ARM_gradient_estimator-yellow)
+![](https://img.shields.io/badge/OtherTechnology-Gradient-yellow)
 
-+ **Efficient implicit unsupervised text hashing using adversarial autoencoder.**In **WWW'2020**
++ **Efficient implicit unsupervised text hashing using adversarial autoencoder.** In **WWW'2020**
 [Paper](https://dl.acm.org/doi/pdf/10.1145/3366423.3380150) [Code](https://github.com/khoadoan/daba-hashing).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-CB,Quan(Sigmoid)-red)
 ![](https://img.shields.io/badge/OtherTechnology-Robustness-yellow)
 
-+ **Generative semantic hashing enhanced via Boltzmann machines.**In **WWW'2020**
++ **Generative semantic hashing enhanced via Boltzmann machines.** In **WWW'2020**
 [Paper](https://arxiv.org/pdf/2006.08858).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(BM)-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-Quan(Sgn)-red)
 
-+ **Unsupervised few-bits semantic hashing with implicit topics modeling.**In **EMNLP'2020**
++ **Unsupervised few-bits semantic hashing with implicit topics modeling.** In **EMNLP'2020**
 [Paper](https://aclanthology.org/2020.findings-emnlp.233.pdf) [Code](https://github.com/smartyfh/wish).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(B)-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-CB,FE,Quan(Sgn)-red)
 
-+ **Learning discrete structured representations by adversarially maximizing mutual information.**In **ICML'2020**
++ **Learning discrete structured representations by adversarially maximizing mutual information.** In **ICML'2020**
 [Paper](https://arxiv.org/pdf/2004.03991) [Code](https://github.com/karlstratos/ammi).\
 ![](https://img.shields.io/badge/SemanticExtraction-MMI-brightgreen)
 
-+ **node2hash: Graph aware deep semantic text hashing.**In **Inf.Process.Manag.'2020**
++ **node2hash: Graph aware deep semantic text hashing.** In **Inf.Process.Manag.'2020**
 [Paper](https://www.sciencedirect.com/science/article/abs/pii/S0306457319301827) [Code](https://github.com/unsuthee/node2hash).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(G),Pse-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-Drop-red)
 
-+ **Unsupervised semantic hashing with pairwise reconstruction.**In **SIGIR'2020**
-[Paper](https://arxiv.org/pdf/2007.00380)[Code](https://github.com/casperhansen/PairRec).\
++ **Unsupervised semantic hashing with pairwise reconstruction.** In **SIGIR'2020**
+[Paper](https://arxiv.org/pdf/2007.00380) [Code](https://github.com/casperhansen/PairRec).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(B),Pse-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-CB,Quan(Sgn)-red)
 ![](https://img.shields.io/badge/OtherTechnology-Robustness-yellow)
 
-+ **Hashing based answer selection.**In **AAAI'2020**\
++ **Hashing based answer selection.** In **AAAI'2020**
 [Paper](https://arxiv.org/pdf/1905.10718).\
 ![](https://img.shields.io/badge/SemanticExtraction-SFR-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-Quan,Quan(STanh)-red)
 
-+ **Document Hashing with Mixture-Prior Generative Models.**In **EMNLP'2019**
++ **Document Hashing with Mixture-Prior Generative Models.** In **EMNLP'2019**
 [Paper](https://arxiv.org/pdf/1908.11078v1).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(M)-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-BMSH:CB,Quan(Sgn)-red)
 
-+ **Doc2hash: Learning discrete latent variables for documents retrieval.**In **NAACL'2019**
-[Paper](https://aclanthology.org/N19-1232.pdf)[Code](https://github.com/yifeiacc/doc2hash).\
++ **Doc2hash: Learning discrete latent variables for documents retrieval.** In **NAACL'2019**
+[Paper](https://aclanthology.org/N19-1232.pdf) [Code](https://github.com/yifeiacc/doc2hash).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(C)-brightgreen)
-![](https://img.shields.io/badge/OtherTechnology-Gumbel_softmax-yellow)
+![](https://img.shields.io/badge/OtherTechnology-Gradient-yellow)
 
-+ **A binary variational autoencoder for hashing.**In **CIARP'2019**
++ **A binary variational autoencoder for hashing.** In **CIARP'2019**
 [Paper](https://link.springer.com/chapter/10.1007/978-3-030-33904-3_12).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(B)-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-CB,Quan(Sgn)-red)
-![](https://img.shields.io/badge/OtherTechnology-Gumbel_softmax-yellow)
+![](https://img.shields.io/badge/OtherTechnology-Gradient-yellow)
 
-+ **Unsupervised neural generative semantic hashing.**In **SIGIR'2019**
++ **Unsupervised neural generative semantic hashing.** In **SIGIR'2019**
 [Paper](https://arxiv.org/pdf/1906.00671).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(B),Pse-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-CB,Quan(Sgn)-red)
 ![](https://img.shields.io/badge/OtherTechnology-Robustness-yellow)
 
-+ **Short text analysis based on dual semantic extension and deep hashing in microblog.**In **TIST'2019**
++ **Short text analysis based on dual semantic extension and deep hashing in microblog.** In **TIST'2019**
 [Paper](https://dl.acm.org/doi/pdf/10.1145/3326166).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,SFC-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-Quan(Sigmoid)-red)
 ![](https://img.shields.io/badge/OtherTechnology-Robustness-yellow)
 
-+ **Variational deep semantic text hashing with pairwise labels.**In **IMCOM'2019**
++ **Variational deep semantic text hashing with pairwise labels.** In **IMCOM'2019**
 [Paper](https://link.springer.com/chapter/10.1007/978-3-030-19063-7_85).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(G),SLR-brightgreen)
 
 
-+ **Nash: Toward end-to-end neural architecture for generative semantic hashing.**In **ACL'2018**
-[Paper](https://aclanthology.org/P18-1190.pdf)[Code](https://github.com/donggyukimc/nash).\
++ **Nash: Toward end-to-end neural architecture for generative semantic hashing.** In **ACL'2018**
+[Paper](https://aclanthology.org/P18-1190.pdf) [Code](https://github.com/donggyukimc/nash).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(B)-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-CB,Quan(Sgn)-red)
 ![](https://img.shields.io/badge/OtherTechnology-Robustness-yellow)
 
-+ **Deep semantic text hashing with weak supervision.**In **SIGIR'2018**
++ **Deep semantic text hashing with weak supervision.** In **SIGIR'2018**
 [Paper](https://dl.acm.org/doi/pdf/10.1145/3209978.3210090).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(G),Pse-brightgreen)
 
-+ **Variational deep semantic hashing for text documents.**In **SIGIR'2018**
-[Paper](https://arxiv.org/pdf/1708.03436)[Code](https://github.com/unsuthee/VariationalDeepSemanticHashing/blob/master/VDSH.py).\
++ **Variational deep semantic hashing for text documents.** In **SIGIR'2017**
+[Paper](https://arxiv.org/pdf/1708.03436) [Code](https://github.com/unsuthee/VariationalDeepSemanticHashing/blob/master/VDSH.py).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,Prior(G)-brightgreen)
 
-+ **A Document Modeling Method Based on Deep Generative Model and Spectral Hashing.**In **KSEM'2016**
-[Paper](https://link.springer.com/chapter/10.1007/978-3-319-47650-6_32)
++ **A Document Modeling Method Based on Deep Generative Model and Spectral Hashing.** In **KSEM'2016**
+[Paper](https://link.springer.com/chapter/10.1007/978-3-319-47650-6_32).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec-brightgreen)
 ![](https://img.shields.io/badge/CodeQuality-CB-red)
 
-+ **Understanding short texts through semantic enrichment and hashing.**In **TKDE'2015**
-[Paper](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7286811)
++ **Understanding short texts through semantic enrichment and hashing.** In **TKDE'2015**
+[Paper](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7286811).\
 ![](https://img.shields.io/badge/SemanticExtraction-Rec,SFC-brightgreen)
 ![](https://img.shields.io/badge/OtherTechnology-Robustness-yellow)
 
-+ **Convolutional neural networks for text hashing.**In **IJCAI'2020**
-[Paper](https://www.ijcai.org/Proceedings/15/Papers/197.pdf)
++ **Convolutional neural networks for text hashing.** In **IJCAI'2015**
+[Paper](https://www.ijcai.org/Proceedings/15/Papers/197.pdf).\
 ![](https://img.shields.io/badge/SemanticExtraction-SFC-brightgreen)
 
 ## Datasets
