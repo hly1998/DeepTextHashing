@@ -235,5 +235,3 @@ Then, refer to the code in the *utils* folder to preprocess the dataset. Once th
 ```bash
 sh models/{model_name}/run.sh
 ```
-
-## Acknowledgments
