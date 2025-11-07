@@ -235,3 +235,13 @@ Then, refer to the code in the *utils* folder to preprocess the dataset. Once th
 ```bash
 sh models/{model_name}/run.sh
 ```
+
+## Citation
+```bibtex
+@article{he2025survey,
+  title={A Survey on Deep Text Hashing: Efficient Semantic Text Retrieval with Binary Representation},
+  author={He, Liyang and Huang, Zhenya and Yang, Cheng and Li, Rui and Zhang, Zheng and Zhang, Kai and Li, Zhi and Liu, Qi and Chen, Enhong},
+  journal={arXiv preprint arXiv:2510.27232},
+  year={2025}
+}
+```
