@@ -1,13 +1,164 @@
-datasets/agnews/
-datasets/reuters/
-datasets/dbpedia/
-datasets/ng20/
-datasets/nyt/
-datasets/yahooanswer/
-datasets/rcv1/
-datasets/TMC/
-datasets/metadata/
-delete_file/
+# ============================================
+# Python
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ============================================
+# Virtual Environment
+# ============================================
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.conda/
+.flake8
+
+# ============================================
+# IDE / Editor
+# ============================================
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm / JetBrains
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Spyder
+.spyderproject
+.spyproject
+
+# Rope
+.ropeproject
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+\#*\#
+.#*
+
+# ============================================
+# OS Generated Files
+# ============================================
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+
+# ============================================
+# Logs and Databases
+# ============================================
+*.log
+*.sql
+*.sqlite
+
+# ============================================
+# Project Specific
+# ============================================
+# Datasets (large files, download separately)
+textdata/agnews/
+textdata/reuters/
+textdata/dbpedia/
+textdata/ng20/
+textdata/nyt/
+textdata/yahooanswer/
+textdata/rcv1/
+textdata/tmc/
+textdata/metadata/
+
+# Model checkpoints and logs (global)
 checkpoints/
 logs/
+runs/
+outputs/
+results/
+
+# Model checkpoints and logs (per-model)
+models/*/logs/
+models/*/checkpoints/
+
+# Temporary files
+delete_file/
+tmp/
+temp/
+
+# Neighbor data for NbrReg model
 models/NbrReg/neighbor_data/
+
+# ============================================
+# Testing / Coverage
+# ============================================
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# ============================================
+# Documentation
+# ============================================
+docs/_build/
+site/
+
+# ============================================
+# Misc
+# ============================================
+*.bak
+*.tmp
+*.temp
+.python-version
