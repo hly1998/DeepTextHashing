@@ -1,38 +1,38 @@
-# A Survey on Deep Text Hashing
+# 深度文本哈希综述
 
 [![English](https://img.shields.io/badge/Language-English-blue)](README.md) [![中文](https://img.shields.io/badge/Language-中文-red)](README_CN.md)
 
-This repository offers a carefully curated selection of research papers centered on **deep text hashing**. It is based on our survey paper, **A Survey on Deep Text Hashing: Efficient Semantic Text Retrieval with Binary Representation**. The list will be updated regularly. Should you come across any inaccuracies or overlooked works, you are warmly encouraged to open an issue or submit a pull request.
+本仓库精选了**深度文本哈希**领域的研究论文。基于我们的综述论文 **A Survey on Deep Text Hashing: Efficient Semantic Text Retrieval with Binary Representation**，我们将持续更新论文列表。如发现任何错误或遗漏，欢迎提交 Issue 或 Pull Request。
 
 ![](./image/framework.png)
 
-## Table of Contents
+## 目录
 
-- [Meaning of the Marker](#meaning-of-the-marker)
-- [Paper List](#paper-list)
-- [Datasets](#datasets)
-- [Models](#models)
-- [Quick Start](#quick-start)
-- [Citation](#citation)
+- [标记说明](#标记说明)
+- [论文列表](#论文列表)
+- [数据集](#数据集)
+- [模型实现](#模型实现)
+- [快速开始](#快速开始)
+- [引用](#引用)
 
-## Meaning of the Marker
+## 标记说明
 
-| Marker | Meaning |
-| ------ | ------- |
-| ![](https://img.shields.io/badge/SemanticExtraction-Rec-brightgreen) | Reconstruction-based method |
-| ![](https://img.shields.io/badge/SemanticExtraction-Prior(X)-brightgreen) | Applying a prior on the latent representation (X: G=Gaussian, B=Bernoulli, M=Mixture, C=Categorical, BM=Boltzmann, GA=Graph) |
-| ![](https://img.shields.io/badge/SemanticExtraction-Pse-brightgreen) | Pseudo-similarity-based method |
-| ![](https://img.shields.io/badge/SemanticExtraction-MMI-brightgreen) | Maximal mutual information method |
-| ![](https://img.shields.io/badge/SemanticExtraction-SFC-brightgreen) | Learning semantic from categories |
-| ![](https://img.shields.io/badge/SemanticExtraction-SFR-brightgreen) | Learning semantic from relevance |
-| ![](https://img.shields.io/badge/CodeQuality-CB-red) | Promoting code balance |
-| ![](https://img.shields.io/badge/CodeQuality-FE-red) | Promoting few-bit code |
-| ![](https://img.shields.io/badge/CodeQuality-Quan(X)-red) | Using quantization method (X: Loss=quantization loss, Sgn=Signum, Sigmoid, Tanh, STanh=scaled tanh) |
-| ![](https://img.shields.io/badge/OtherTechnology-Robustness-yellow) | Promoting the robustness of hash codes |
-| ![](https://img.shields.io/badge/OtherTechnology-Gradient-yellow) | Optimization of gradients during backpropagation in discrete layers |
-| ![](https://img.shields.io/badge/OtherTechnology-Index-yellow) | Adaptation to hashing index |
+| 标记 | 含义 |
+| ---- | ---- |
+| ![](https://img.shields.io/badge/SemanticExtraction-Rec-brightgreen) | 基于重建的方法 |
+| ![](https://img.shields.io/badge/SemanticExtraction-Prior(X)-brightgreen) | 在隐表示上施加先验分布 (X: G=高斯, B=伯努利, M=混合, C=分类, BM=玻尔兹曼, GA=图) |
+| ![](https://img.shields.io/badge/SemanticExtraction-Pse-brightgreen) | 基于伪相似度的方法 |
+| ![](https://img.shields.io/badge/SemanticExtraction-MMI-brightgreen) | 最大互信息方法 |
+| ![](https://img.shields.io/badge/SemanticExtraction-SFC-brightgreen) | 从类别学习语义 |
+| ![](https://img.shields.io/badge/SemanticExtraction-SFR-brightgreen) | 从相关性学习语义 |
+| ![](https://img.shields.io/badge/CodeQuality-CB-red) | 促进编码平衡 |
+| ![](https://img.shields.io/badge/CodeQuality-FE-red) | 促进少比特编码 |
+| ![](https://img.shields.io/badge/CodeQuality-Quan(X)-red) | 使用量化方法 (X: Loss=量化损失, Sgn=符号函数, Sigmoid, Tanh, STanh=缩放tanh) |
+| ![](https://img.shields.io/badge/OtherTechnology-Robustness-yellow) | 增强哈希码鲁棒性 |
+| ![](https://img.shields.io/badge/OtherTechnology-Gradient-yellow) | 离散层反向传播梯度优化 |
+| ![](https://img.shields.io/badge/OtherTechnology-Index-yellow) | 适配哈希索引 |
 
-## Paper List
+## 论文列表
 
 + **De-confusing Hard Samples for Text Semantic Hashing.** In **ICASSP'2025**
 [Paper](https://ieeexplore.ieee.org/abstract/document/10889846).\
@@ -205,29 +205,29 @@ This repository offers a carefully curated selection of research papers centered
 [Paper](https://www.ijcai.org/Proceedings/15/Papers/197.pdf).\
 ![](https://img.shields.io/badge/SemanticExtraction-SFC-brightgreen)
 
-## Datasets
+## 数据集
 
-We have compiled a selection of widely utilized benchmark datasets for text hashing research. These datasets span diverse domains and exhibit a range of characteristics in terms of scale, label types, and download link. For a detailed introduction to the dataset, please refer to our survey.
+我们整理了文本哈希研究中广泛使用的基准数据集，涵盖多个领域，具有不同的规模和标签类型。详细介绍请参阅我们的综述论文。
 
-| Datasets | Instances | Categories | Label Type | Link |
-| -------- | --------- | ---------- | ---------- | ---- |
-| 20Newsgroups | 18,846 | 20 | Single-label | [link](https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html) |
-| Agnews | 127,600 | 4 | Single-label | [link](http://groups.di.unipi.it/gulli/AG_corpus_of_news_articles.html) |
-| Reuters | 10,788 | 90/20 | Multi-label | [link](https://www.nltk.org/book/ch02.html) |
-| DBpedia | 60,000 | 14 | Single-label | [link](https://www.csie.ntu.edu.tw/cjlin/libsvmtools/datasets/multilabel.html) |
-| RCV1 | 804,414 | 103/4 | Multi-label | [link](https://catalog.data.gov/dataset/siam-2007-text-mining-competition-dataset) |
-| TMC | 28,596 | 22 | Multi-label | [link](https://catalog.data.gov/dataset/siam-2007-text-mining-competition-dataset) |
-| NYT | 11,527 | 26 | Single-label | [link](https://emilhvitfeldt.github.io/textdata/reference/dataset_dbpedia.html) |
-| Yahooanswer | 1,460,000 | 10 | Single-label | [link](https://www.kaggle.com/soumikrakshit/yahoo-answers-dataset) |
+| 数据集 | 样本数 | 类别数 | 标签类型 | 下载链接 |
+| ------ | ------ | ------ | -------- | -------- |
+| 20Newsgroups | 18,846 | 20 | 单标签 | [link](https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html) |
+| Agnews | 127,600 | 4 | 单标签 | [link](http://groups.di.unipi.it/gulli/AG_corpus_of_news_articles.html) |
+| Reuters | 10,788 | 90/20 | 多标签 | [link](https://www.nltk.org/book/ch02.html) |
+| DBpedia | 60,000 | 14 | 单标签 | [link](https://www.csie.ntu.edu.tw/cjlin/libsvmtools/datasets/multilabel.html) |
+| RCV1 | 804,414 | 103/4 | 多标签 | [link](https://catalog.data.gov/dataset/siam-2007-text-mining-competition-dataset) |
+| TMC | 28,596 | 22 | 多标签 | [link](https://catalog.data.gov/dataset/siam-2007-text-mining-competition-dataset) |
+| NYT | 11,527 | 26 | 单标签 | [link](https://emilhvitfeldt.github.io/textdata/reference/dataset_dbpedia.html) |
+| Yahooanswer | 1,460,000 | 10 | 单标签 | [link](https://www.kaggle.com/soumikrakshit/yahoo-answers-dataset) |
 
-## Models
+## 模型实现
 
-We have implemented several deep text hashing models using the **PyTorch** framework. Our foundational code structure is inspired by the [VDSH](https://github.com/bayesquant/VDSH) repository.
+我们使用 **PyTorch** 框架实现了多个深度文本哈希模型。代码结构参考了 [VDSH](https://github.com/bayesquant/VDSH) 仓库。
 
-### Implemented Models
+### 已实现模型
 
-| Model | Paper | Venue | Status |
-| ----- | ----- | ----- | ------ |
+| 模型 | 论文 | 发表venue | 状态 |
+| ---- | ---- | --------- | ---- |
 | VDSH | Variational deep semantic hashing for text documents | SIGIR'2017 | ✅ |
 | NbrReg | Deep semantic text hashing with weak supervision | SIGIR'2018 | ✅ |
 | RBSH | Unsupervised neural generative semantic hashing | SIGIR'2019 | ✅ |
@@ -236,42 +236,42 @@ We have implemented several deep text hashing models using the **PyTorch** frame
 | MISH | Unsupervised multi-index semantic hashing | WWW'2021 | ✅ |
 | SMASH | An efficient and robust semantic hashing framework | TOIS'2023 | ✅ |
 
-> **Note:** Due to variations in data preprocessing, the results of different models may deviate from those reported in the original papers. We are actively working to standardize both the data processing pipeline and evaluation metrics.
+> **注意：** 由于数据预处理方式的差异，不同模型的实验结果可能与原论文有所偏差。我们正在努力统一数据处理流程和评估指标。
 
-## Quick Start
+## 快速开始
 
-### 1. Installation
+### 1. 安装依赖
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Data Preprocessing
+### 2. 数据预处理
 
-Refer to the code in the `utils/` folder to preprocess the dataset:
+参考 `utils/` 文件夹中的代码进行数据预处理：
 
 ```bash
 python utils/preprocess.py --dataset ng20
 ```
 
-### 3. Training
+### 3. 训练模型
 
-Once data preparation is complete, train any model with:
+数据准备完成后，运行以下命令训练模型：
 
 ```bash
 sh models/{model_name}/train.sh
 ```
 
-For example:
+例如：
 ```bash
 sh models/VDSH/train.sh
 ```
 
-### Project Structure
+### 项目结构
 
 ```
 DeepTextHashing/
-├── models/              # Model implementations
+├── models/              # 模型实现
 │   ├── VDSH/
 │   ├── NbrReg/
 │   ├── RBSH/
@@ -279,14 +279,14 @@ DeepTextHashing/
 │   ├── AMMI/
 │   ├── MISH/
 │   └── SMASH/
-├── textdata/            # Dataset loading utilities
-├── utils/               # Preprocessing and evaluation utilities
+├── textdata/            # 数据集加载工具
+├── utils/               # 预处理和评估工具
 └── requirements.txt
 ```
 
-## Citation
+## 引用
 
-If you find this repository helpful, please cite our survey:
+如果本仓库对您有帮助，请引用我们的综述论文：
 
 ```bibtex
 @article{he2025survey,
@@ -296,3 +296,4 @@ If you find this repository helpful, please cite our survey:
   year={2025}
 }
 ```
+

@@ -3,7 +3,7 @@
 使用余弦相似度计算文档间的相似性，并保存Top-K邻居索引
 
 用法:
-    python prepare_neighbor_data.py --dataset ng20 --use_train
+    python prepare_neighbor_data.py --dataset ng20
 """
 
 import argparse
@@ -55,15 +55,7 @@ def get_device(config):
 
 
 def load_dataset(dataset_name):
-    """
-    加载数据集
-
-    Args:
-        dataset_name: 数据集名称
-
-    Returns:
-        包含训练集、测试集和验证集的数据对象
-    """
+    """加载数据集"""
     data_path = Path(__file__).parent.parent.parent / 'textdata'
 
     train_df = pd.read_pickle(f"{data_path}/{dataset_name}/train.tfidf.df.pkl")
@@ -75,10 +67,7 @@ def load_dataset(dataset_name):
     test = np.array([csr_data.toarray()[0] for csr_data in test_df.bow.tolist()])
     cv = np.array([csr_data.toarray()[0] for csr_data in cv_df.bow.tolist()])
 
-    # 过滤空文档
-    train_len = np.sum(train > 0, axis=1)
-    nz_indices = np.where(train_len > 0)[0]
-    train = train[nz_indices, :]
+    # 注意：不过滤空文档，保持索引与数据集一致
 
     class DataContainer:
         pass
@@ -101,18 +90,7 @@ def compute_topk_cosine_similarity(
     query_batch_size=500,
     doc_batch_size=100
 ):
-    """
-    使用余弦相似度计算Top-K邻居并保存到文件
-
-    Args:
-        out_fn: 输出文件路径
-        queries: 查询文档矩阵
-        documents: 候选文档矩阵
-        top_k: 返回的邻居数量
-        device: 计算设备
-        query_batch_size: 查询批大小
-        doc_batch_size: 文档批大小
-    """
+    """使用余弦相似度计算Top-K邻居并保存到文件"""
     n_docs = documents.shape[0]
     n_queries = queries.shape[0]
     query_row = 0
@@ -122,7 +100,6 @@ def compute_topk_cosine_similarity(
             query_batch_s_idx = q_idx
             query_batch_e_idx = min(query_batch_s_idx + query_batch_size, n_queries)
 
-            # 加载查询批次
             query_mats = torch.FloatTensor(queries[query_batch_s_idx:query_batch_e_idx]).to(device)
             query_norm = torch.norm(query_mats, 2, dim=1, keepdim=True)
             query_mats_3d = query_mats.unsqueeze(2)
@@ -135,14 +112,11 @@ def compute_topk_cosine_similarity(
                 batch_e_idx = min(batch_s_idx + doc_batch_size, n_docs)
                 n_doc_in_batch = batch_e_idx - batch_s_idx
 
-                # 加载候选文档批次
                 candidate_mats = torch.FloatTensor(documents[batch_s_idx:batch_e_idx]).to(device)
                 candidate_norm = torch.norm(candidate_mats, 2, dim=1, keepdim=True)
 
-                # 准备用于批量矩阵乘法
                 candidate_mats_3d = candidate_mats.unsqueeze(2).permute(2, 1, 0)
 
-                # 扩展维度以进行批量计算
                 query_expanded = query_mats_3d.expand(
                     query_mats_3d.size(0),
                     query_mats_3d.size(1),
@@ -150,12 +124,10 @@ def compute_topk_cosine_similarity(
                 )
                 candidate_expanded = candidate_mats_3d.expand_as(query_expanded)
 
-                # 计算余弦相似度
                 cos_sim = torch.sum(query_expanded * candidate_expanded, dim=1) / (
                     query_norm * candidate_norm.T + 1e-8
                 )
 
-                # 获取当前批次的Top-K
                 k = min(top_k, n_doc_in_batch)
                 scores, indices = torch.topk(cos_sim, k, dim=1, largest=True)
 
@@ -167,7 +139,6 @@ def compute_topk_cosine_similarity(
                 score_list.append(scores)
                 indices_list.append(indices + batch_s_idx)
 
-            # 合并所有批次的结果
             all_scores = torch.cat(score_list, dim=1)
             all_indices = torch.cat(indices_list, dim=1)
             _, sort_indices = torch.topk(all_scores, top_k, dim=1, largest=True)
@@ -179,7 +150,6 @@ def compute_topk_cosine_similarity(
             del score_list
             del indices_list
 
-            # 写入文件
             topk_indices = topk_indices.cpu().numpy()
             for row in topk_indices:
                 out_file.write(f"{query_row}:")

@@ -132,7 +132,7 @@ tmp/
 temp/
 
 # Neighbor data for NbrReg model
-models/NbrReg/neighbor_data/
+models/*/neighbor_data/
 
 # ============================================
 # Testing / Coverage

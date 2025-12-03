@@ -3,7 +3,7 @@
 使用余弦相似度计算文档间的相似性，并保存Top-K邻居索引
 
 用法:
-    python prepare_neighbor_data.py --dataset ng20 --use_train
+    python prepare_neighbor_data.py --dataset ng20
 """
 
 import argparse
