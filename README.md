@@ -1,4 +1,4 @@
-# A Survey on Deep Text Hashing
+# A Survey on Deep Text Hashing: Efficient Semantic Text Retrieval with Binary Representation
 
 [![English](https://img.shields.io/badge/Language-English-blue)](README.md) [![中文](https://img.shields.io/badge/Language-中文-red)](README_CN.md)
 
