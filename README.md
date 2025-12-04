@@ -1,5 +1,9 @@
 # A Survey on Deep Text Hashing: Efficient Semantic Text Retrieval with Binary Representation
 
+[![arXiv](https://img.shields.io/badge/arXiv-2510.27232-b31b1b.svg)](https://arxiv.org/abs/2510.27232)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-1.10+-orange.svg)](https://pytorch.org/)
 [![English](https://img.shields.io/badge/Language-English-blue)](README.md) [![中文](https://img.shields.io/badge/Language-中文-red)](README_CN.md)
 
 This repository offers a carefully curated selection of research papers centered on **deep text hashing**. It is based on our survey paper, **A Survey on Deep Text Hashing: Efficient Semantic Text Retrieval with Binary Representation**. The list will be updated regularly. Should you come across any inaccuracies or overlooked works, you are warmly encouraged to open an issue or submit a pull request.
@@ -8,14 +12,110 @@ This repository offers a carefully curated selection of research papers centered
 
 ## Table of Contents
 
-- [Meaning of the Marker](#meaning-of-the-marker)
-- [Paper List](#paper-list)
-- [Datasets](#datasets)
 - [Models](#models)
 - [Quick Start](#quick-start)
+- [Datasets](#datasets)
+- [Paper List](#paper-list)
 - [Citation](#citation)
 
-## Meaning of the Marker
+## Models
+
+We have implemented several deep text hashing models using the **PyTorch** framework. Our foundational code structure is inspired by the [VDSH](https://github.com/bayesquant/VDSH) repository.
+
+### Implemented Models
+
+| Model | Paper | Venue | Status |
+| ----- | ----- | ----- | ------ |
+| VDSH | Variational deep semantic hashing for text documents | SIGIR'2017 | ✅ |
+| NbrReg | Deep semantic text hashing with weak supervision | SIGIR'2018 | ✅ |
+| NASH | Toward end-to-end neural architecture for generative semantic hashing | ACL'2018 | ✅ |
+| B-VAE | A binary variational autoencoder for hashing | CIARP'2019 | ✅ |
+| Doc2Hash | Learning discrete latent variables for documents retrieval | NAACL'2019 | ✅ |
+| RBSH | Unsupervised neural generative semantic hashing | SIGIR'2019 | ✅ |
+| AMMI | Learning discrete structured representations by adversarially maximizing mutual information | ICML'2020 | ✅ |
+| PairRec | Unsupervised semantic hashing with pairwise reconstruction | SIGIR'2020 | ✅ |
+| WISH | Unsupervised few-bits semantic hashing with implicit topics modeling | EMNLP'2020 | ✅ |
+| MISH | Unsupervised multi-index semantic hashing | WWW'2021 | ✅ |
+| SNUH | Integrating semantics and neighborhood information | ACL'2021 | ✅ |
+| SSB-VAE | Self-supervised bernoulli autoencoders for semi-supervised hashing | CIARP'2021 | ✅ |
+| SMASH | An efficient and robust semantic hashing framework | TOIS'2023 | ✅ |
+| HierHash | Multi-grained prototype-induced hierarchical generative model | EMNLP'2024 | ✅ |
+| DHSH | De-confusing hard samples for text semantic hashing | ICASSP'2025 | ✅ |
+
+> **Note:** Due to variations in data preprocessing, the results of different models may deviate from those reported in the original papers. We are actively working to standardize both the data processing pipeline and evaluation metrics.
+
+### Project Structure
+
+```
+DeepTextHashing/
+├── models/              # Model implementations
+│   ├── VDSH/
+│   ├── NbrReg/
+│   ├── NASH/
+│   ├── B-VAE/
+│   ├── Doc2Hash/
+│   ├── RBSH/
+│   ├── AMMI/
+│   ├── PairRec/
+│   ├── WISH/
+│   ├── MISH/
+│   ├── SNUH/
+│   ├── SSB-VAE/
+│   ├── SMASH/
+│   ├── HierHash/
+│   └── DHSH/
+├── textdata/            # Dataset loading utilities
+├── utils/               # Preprocessing and evaluation utilities
+└── requirements.txt
+```
+
+## Quick Start
+
+### 1. Installation
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Data Preprocessing
+
+Refer to the code in the `utils/` folder to preprocess the dataset:
+
+```bash
+python utils/preprocess.py --dataset ng20
+```
+
+### 3. Training
+
+Once data preparation is complete, train any model with:
+
+```bash
+sh models/{model_name}/train.sh
+```
+
+For example:
+```bash
+sh models/VDSH/train.sh
+```
+
+## Datasets
+
+We have compiled a selection of widely utilized benchmark datasets for text hashing research. These datasets span diverse domains and exhibit a range of characteristics in terms of scale, label types, and download link. For a detailed introduction to the dataset, please refer to our survey.
+
+| Datasets | Instances | Categories | Label Type | Link |
+| -------- | --------- | ---------- | ---------- | ---- |
+| 20Newsgroups | 18,846 | 20 | Single-label | [link](https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html) |
+| Agnews | 127,600 | 4 | Single-label | [link](http://groups.di.unipi.it/gulli/AG_corpus_of_news_articles.html) |
+| Reuters | 10,788 | 90/20 | Multi-label | [link](https://www.nltk.org/book/ch02.html) |
+| DBpedia | 60,000 | 14 | Single-label | [link](https://www.csie.ntu.edu.tw/cjlin/libsvmtools/datasets/multilabel.html) |
+| RCV1 | 804,414 | 103/4 | Multi-label | [link](https://catalog.data.gov/dataset/siam-2007-text-mining-competition-dataset) |
+| TMC | 28,596 | 22 | Multi-label | [link](https://catalog.data.gov/dataset/siam-2007-text-mining-competition-dataset) |
+| NYT | 11,527 | 26 | Single-label | [link](https://emilhvitfeldt.github.io/textdata/reference/dataset_dbpedia.html) |
+| Yahooanswer | 1,460,000 | 10 | Single-label | [link](https://www.kaggle.com/soumikrakshit/yahoo-answers-dataset) |
+
+## Paper List
+
+### Meaning of the Marker
 
 | Marker | Meaning |
 | ------ | ------- |
@@ -32,7 +132,7 @@ This repository offers a carefully curated selection of research papers centered
 | ![](https://img.shields.io/badge/OtherTechnology-Gradient-yellow) | Optimization of gradients during backpropagation in discrete layers |
 | ![](https://img.shields.io/badge/OtherTechnology-Index-yellow) | Adaptation to hashing index |
 
-## Paper List
+### Papers
 
 + **De-confusing Hard Samples for Text Semantic Hashing.** In **ICASSP'2025**
 [Paper](https://ieeexplore.ieee.org/abstract/document/10889846).\
@@ -204,85 +304,6 @@ This repository offers a carefully curated selection of research papers centered
 + **Convolutional neural networks for text hashing.** In **IJCAI'2015**
 [Paper](https://www.ijcai.org/Proceedings/15/Papers/197.pdf).\
 ![](https://img.shields.io/badge/SemanticExtraction-SFC-brightgreen)
-
-## Datasets
-
-We have compiled a selection of widely utilized benchmark datasets for text hashing research. These datasets span diverse domains and exhibit a range of characteristics in terms of scale, label types, and download link. For a detailed introduction to the dataset, please refer to our survey.
-
-| Datasets | Instances | Categories | Label Type | Link |
-| -------- | --------- | ---------- | ---------- | ---- |
-| 20Newsgroups | 18,846 | 20 | Single-label | [link](https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html) |
-| Agnews | 127,600 | 4 | Single-label | [link](http://groups.di.unipi.it/gulli/AG_corpus_of_news_articles.html) |
-| Reuters | 10,788 | 90/20 | Multi-label | [link](https://www.nltk.org/book/ch02.html) |
-| DBpedia | 60,000 | 14 | Single-label | [link](https://www.csie.ntu.edu.tw/cjlin/libsvmtools/datasets/multilabel.html) |
-| RCV1 | 804,414 | 103/4 | Multi-label | [link](https://catalog.data.gov/dataset/siam-2007-text-mining-competition-dataset) |
-| TMC | 28,596 | 22 | Multi-label | [link](https://catalog.data.gov/dataset/siam-2007-text-mining-competition-dataset) |
-| NYT | 11,527 | 26 | Single-label | [link](https://emilhvitfeldt.github.io/textdata/reference/dataset_dbpedia.html) |
-| Yahooanswer | 1,460,000 | 10 | Single-label | [link](https://www.kaggle.com/soumikrakshit/yahoo-answers-dataset) |
-
-## Models
-
-We have implemented several deep text hashing models using the **PyTorch** framework. Our foundational code structure is inspired by the [VDSH](https://github.com/bayesquant/VDSH) repository.
-
-### Implemented Models
-
-| Model | Paper | Venue | Status |
-| ----- | ----- | ----- | ------ |
-| VDSH | Variational deep semantic hashing for text documents | SIGIR'2017 | ✅ |
-| NbrReg | Deep semantic text hashing with weak supervision | SIGIR'2018 | ✅ |
-| RBSH | Unsupervised neural generative semantic hashing | SIGIR'2019 | ✅ |
-| PairRec | Unsupervised semantic hashing with pairwise reconstruction | SIGIR'2020 | ✅ |
-| AMMI | Learning discrete structured representations by adversarially maximizing mutual information | ICML'2020 | ✅ |
-| MISH | Unsupervised multi-index semantic hashing | WWW'2021 | ✅ |
-| SMASH | An efficient and robust semantic hashing framework | TOIS'2023 | ✅ |
-
-> **Note:** Due to variations in data preprocessing, the results of different models may deviate from those reported in the original papers. We are actively working to standardize both the data processing pipeline and evaluation metrics.
-
-## Quick Start
-
-### 1. Installation
-
-```bash
-pip install -r requirements.txt
-```
-
-### 2. Data Preprocessing
-
-Refer to the code in the `utils/` folder to preprocess the dataset:
-
-```bash
-python utils/preprocess.py --dataset ng20
-```
-
-### 3. Training
-
-Once data preparation is complete, train any model with:
-
-```bash
-sh models/{model_name}/train.sh
-```
-
-For example:
-```bash
-sh models/VDSH/train.sh
-```
-
-### Project Structure
-
-```
-DeepTextHashing/
-├── models/              # Model implementations
-│   ├── VDSH/
-│   ├── NbrReg/
-│   ├── RBSH/
-│   ├── PairRec/
-│   ├── AMMI/
-│   ├── MISH/
-│   └── SMASH/
-├── textdata/            # Dataset loading utilities
-├── utils/               # Preprocessing and evaluation utilities
-└── requirements.txt
-```
 
 ## Citation
 

@@ -1,38 +1,138 @@
-# 深度文本哈希综述
+# 深度文本哈希综述：基于二进制表示的高效语义文本检索
 
+[![arXiv](https://img.shields.io/badge/arXiv-2510.27232-b31b1b.svg)](https://arxiv.org/abs/2510.27232)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-1.10+-orange.svg)](https://pytorch.org/)
 [![English](https://img.shields.io/badge/Language-English-blue)](README.md) [![中文](https://img.shields.io/badge/Language-中文-red)](README_CN.md)
 
-本仓库精选了**深度文本哈希**领域的研究论文。基于我们的综述论文 **A Survey on Deep Text Hashing: Efficient Semantic Text Retrieval with Binary Representation**，我们将持续更新论文列表。如发现任何错误或遗漏，欢迎提交 Issue 或 Pull Request。
+本仓库精选了以**深度文本哈希**为主题的研究论文，基于我们的综述论文《A Survey on Deep Text Hashing: Efficient Semantic Text Retrieval with Binary Representation》整理而成。论文列表将定期更新，如发现任何错误或遗漏，欢迎提交issue或pull request。
 
 ![](./image/framework.png)
 
 ## 目录
 
-- [标记说明](#标记说明)
-- [论文列表](#论文列表)
-- [数据集](#数据集)
-- [模型实现](#模型实现)
+- [模型](#模型)
 - [快速开始](#快速开始)
+- [数据集](#数据集)
+- [论文列表](#论文列表)
 - [引用](#引用)
 
-## 标记说明
+## 模型
+
+我们使用 **PyTorch** 框架实现了多个深度文本哈希模型，代码结构参考了 [VDSH](https://github.com/bayesquant/VDSH) 仓库。
+
+### 已实现模型
+
+| 模型 | 论文 | 发表会议 | 状态 |
+| ---- | ---- | -------- | ---- |
+| VDSH | Variational deep semantic hashing for text documents | SIGIR'2017 | ✅ |
+| NbrReg | Deep semantic text hashing with weak supervision | SIGIR'2018 | ✅ |
+| NASH | Toward end-to-end neural architecture for generative semantic hashing | ACL'2018 | ✅ |
+| B-VAE | A binary variational autoencoder for hashing | CIARP'2019 | ✅ |
+| Doc2Hash | Learning discrete latent variables for documents retrieval | NAACL'2019 | ✅ |
+| RBSH | Unsupervised neural generative semantic hashing | SIGIR'2019 | ✅ |
+| AMMI | Learning discrete structured representations by adversarially maximizing mutual information | ICML'2020 | ✅ |
+| PairRec | Unsupervised semantic hashing with pairwise reconstruction | SIGIR'2020 | ✅ |
+| WISH | Unsupervised few-bits semantic hashing with implicit topics modeling | EMNLP'2020 | ✅ |
+| MISH | Unsupervised multi-index semantic hashing | WWW'2021 | ✅ |
+| SNUH | Integrating semantics and neighborhood information | ACL'2021 | ✅ |
+| SSB-VAE | Self-supervised bernoulli autoencoders for semi-supervised hashing | CIARP'2021 | ✅ |
+| SMASH | An efficient and robust semantic hashing framework | TOIS'2023 | ✅ |
+| HierHash | Multi-grained prototype-induced hierarchical generative model | EMNLP'2024 | ✅ |
+| DHSH | De-confusing hard samples for text semantic hashing | ICASSP'2025 | ✅ |
+
+> **注意：** 由于数据预处理方式的差异，不同模型的结果可能与原论文有所偏差。我们正在努力统一数据处理流程和评估指标。
+
+### 项目结构
+
+```
+DeepTextHashing/
+├── models/              # 模型实现
+│   ├── VDSH/
+│   ├── NbrReg/
+│   ├── NASH/
+│   ├── B-VAE/
+│   ├── Doc2Hash/
+│   ├── RBSH/
+│   ├── AMMI/
+│   ├── PairRec/
+│   ├── WISH/
+│   ├── MISH/
+│   ├── SNUH/
+│   ├── SSB-VAE/
+│   ├── SMASH/
+│   ├── HierHash/
+│   └── DHSH/
+├── textdata/            # 数据集加载工具
+├── utils/               # 预处理和评估工具
+└── requirements.txt
+```
+
+## 快速开始
+
+### 1. 安装依赖
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. 数据预处理
+
+参考 `utils/` 文件夹中的代码进行数据预处理：
+
+```bash
+python utils/preprocess.py --dataset ng20
+```
+
+### 3. 训练模型
+
+数据准备完成后，运行以下命令训练模型：
+
+```bash
+sh models/{model_name}/train.sh
+```
+
+例如：
+```bash
+sh models/VDSH/train.sh
+```
+
+## 数据集
+
+我们整理了文本哈希研究中常用的基准数据集，涵盖不同领域，具有不同的规模和标签类型。详细介绍请参阅我们的综述论文。
+
+| 数据集 | 样本数 | 类别数 | 标签类型 | 链接 |
+| ------ | ------ | ------ | -------- | ---- |
+| 20Newsgroups | 18,846 | 20 | 单标签 | [链接](https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html) |
+| Agnews | 127,600 | 4 | 单标签 | [链接](http://groups.di.unipi.it/gulli/AG_corpus_of_news_articles.html) |
+| Reuters | 10,788 | 90/20 | 多标签 | [链接](https://www.nltk.org/book/ch02.html) |
+| DBpedia | 60,000 | 14 | 单标签 | [链接](https://www.csie.ntu.edu.tw/cjlin/libsvmtools/datasets/multilabel.html) |
+| RCV1 | 804,414 | 103/4 | 多标签 | [链接](https://catalog.data.gov/dataset/siam-2007-text-mining-competition-dataset) |
+| TMC | 28,596 | 22 | 多标签 | [链接](https://catalog.data.gov/dataset/siam-2007-text-mining-competition-dataset) |
+| NYT | 11,527 | 26 | 单标签 | [链接](https://emilhvitfeldt.github.io/textdata/reference/dataset_dbpedia.html) |
+| Yahooanswer | 1,460,000 | 10 | 单标签 | [链接](https://www.kaggle.com/soumikrakshit/yahoo-answers-dataset) |
+
+## 论文列表
+
+### 标记说明
 
 | 标记 | 含义 |
 | ---- | ---- |
 | ![](https://img.shields.io/badge/SemanticExtraction-Rec-brightgreen) | 基于重建的方法 |
-| ![](https://img.shields.io/badge/SemanticExtraction-Prior(X)-brightgreen) | 在隐表示上施加先验分布 (X: G=高斯, B=伯努利, M=混合, C=分类, BM=玻尔兹曼, GA=图) |
+| ![](https://img.shields.io/badge/SemanticExtraction-Prior(X)-brightgreen) | 对潜在表示施加先验 (X: G=高斯, B=伯努利, M=混合, C=分类, BM=玻尔兹曼, GA=图) |
 | ![](https://img.shields.io/badge/SemanticExtraction-Pse-brightgreen) | 基于伪相似度的方法 |
 | ![](https://img.shields.io/badge/SemanticExtraction-MMI-brightgreen) | 最大互信息方法 |
-| ![](https://img.shields.io/badge/SemanticExtraction-SFC-brightgreen) | 从类别学习语义 |
-| ![](https://img.shields.io/badge/SemanticExtraction-SFR-brightgreen) | 从相关性学习语义 |
+| ![](https://img.shields.io/badge/SemanticExtraction-SFC-brightgreen) | 从类别中学习语义 |
+| ![](https://img.shields.io/badge/SemanticExtraction-SFR-brightgreen) | 从相关性中学习语义 |
 | ![](https://img.shields.io/badge/CodeQuality-CB-red) | 促进编码平衡 |
 | ![](https://img.shields.io/badge/CodeQuality-FE-red) | 促进少比特编码 |
 | ![](https://img.shields.io/badge/CodeQuality-Quan(X)-red) | 使用量化方法 (X: Loss=量化损失, Sgn=符号函数, Sigmoid, Tanh, STanh=缩放tanh) |
-| ![](https://img.shields.io/badge/OtherTechnology-Robustness-yellow) | 增强哈希码鲁棒性 |
-| ![](https://img.shields.io/badge/OtherTechnology-Gradient-yellow) | 离散层反向传播梯度优化 |
+| ![](https://img.shields.io/badge/OtherTechnology-Robustness-yellow) | 提升哈希码鲁棒性 |
+| ![](https://img.shields.io/badge/OtherTechnology-Gradient-yellow) | 离散层反向传播的梯度优化 |
 | ![](https://img.shields.io/badge/OtherTechnology-Index-yellow) | 适配哈希索引 |
 
-## 论文列表
+### 论文
 
 + **De-confusing Hard Samples for Text Semantic Hashing.** In **ICASSP'2025**
 [Paper](https://ieeexplore.ieee.org/abstract/document/10889846).\
@@ -205,85 +305,6 @@
 [Paper](https://www.ijcai.org/Proceedings/15/Papers/197.pdf).\
 ![](https://img.shields.io/badge/SemanticExtraction-SFC-brightgreen)
 
-## 数据集
-
-我们整理了文本哈希研究中广泛使用的基准数据集，涵盖多个领域，具有不同的规模和标签类型。详细介绍请参阅我们的综述论文。
-
-| 数据集 | 样本数 | 类别数 | 标签类型 | 下载链接 |
-| ------ | ------ | ------ | -------- | -------- |
-| 20Newsgroups | 18,846 | 20 | 单标签 | [link](https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html) |
-| Agnews | 127,600 | 4 | 单标签 | [link](http://groups.di.unipi.it/gulli/AG_corpus_of_news_articles.html) |
-| Reuters | 10,788 | 90/20 | 多标签 | [link](https://www.nltk.org/book/ch02.html) |
-| DBpedia | 60,000 | 14 | 单标签 | [link](https://www.csie.ntu.edu.tw/cjlin/libsvmtools/datasets/multilabel.html) |
-| RCV1 | 804,414 | 103/4 | 多标签 | [link](https://catalog.data.gov/dataset/siam-2007-text-mining-competition-dataset) |
-| TMC | 28,596 | 22 | 多标签 | [link](https://catalog.data.gov/dataset/siam-2007-text-mining-competition-dataset) |
-| NYT | 11,527 | 26 | 单标签 | [link](https://emilhvitfeldt.github.io/textdata/reference/dataset_dbpedia.html) |
-| Yahooanswer | 1,460,000 | 10 | 单标签 | [link](https://www.kaggle.com/soumikrakshit/yahoo-answers-dataset) |
-
-## 模型实现
-
-我们使用 **PyTorch** 框架实现了多个深度文本哈希模型。代码结构参考了 [VDSH](https://github.com/bayesquant/VDSH) 仓库。
-
-### 已实现模型
-
-| 模型 | 论文 | 发表venue | 状态 |
-| ---- | ---- | --------- | ---- |
-| VDSH | Variational deep semantic hashing for text documents | SIGIR'2017 | ✅ |
-| NbrReg | Deep semantic text hashing with weak supervision | SIGIR'2018 | ✅ |
-| RBSH | Unsupervised neural generative semantic hashing | SIGIR'2019 | ✅ |
-| PairRec | Unsupervised semantic hashing with pairwise reconstruction | SIGIR'2020 | ✅ |
-| AMMI | Learning discrete structured representations by adversarially maximizing mutual information | ICML'2020 | ✅ |
-| MISH | Unsupervised multi-index semantic hashing | WWW'2021 | ✅ |
-| SMASH | An efficient and robust semantic hashing framework | TOIS'2023 | ✅ |
-
-> **注意：** 由于数据预处理方式的差异，不同模型的实验结果可能与原论文有所偏差。我们正在努力统一数据处理流程和评估指标。
-
-## 快速开始
-
-### 1. 安装依赖
-
-```bash
-pip install -r requirements.txt
-```
-
-### 2. 数据预处理
-
-参考 `utils/` 文件夹中的代码进行数据预处理：
-
-```bash
-python utils/preprocess.py --dataset ng20
-```
-
-### 3. 训练模型
-
-数据准备完成后，运行以下命令训练模型：
-
-```bash
-sh models/{model_name}/train.sh
-```
-
-例如：
-```bash
-sh models/VDSH/train.sh
-```
-
-### 项目结构
-
-```
-DeepTextHashing/
-├── models/              # 模型实现
-│   ├── VDSH/
-│   ├── NbrReg/
-│   ├── RBSH/
-│   ├── PairRec/
-│   ├── AMMI/
-│   ├── MISH/
-│   └── SMASH/
-├── textdata/            # 数据集加载工具
-├── utils/               # 预处理和评估工具
-└── requirements.txt
-```
-
 ## 引用
 
 如果本仓库对您有帮助，请引用我们的综述论文：
@@ -296,4 +317,3 @@ DeepTextHashing/
   year={2025}
 }
 ```
-
