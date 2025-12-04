@@ -1,206 +1,235 @@
+"""
+预处理脚本: 生成文档邻居索引
+使用余弦相似度计算文档间的相似性，并保存Top-K邻居索引
+
+用法:
+    python prepare_neighbor_data.py --dataset ng20 --use_train
+"""
+
+import argparse
 import os
-import sys
-os.environ['CUDA_VISIBLE_DEVICES'] = "5"
+from pathlib import Path
 
 import numpy as np
-import os
-from tqdm import tqdm
-import scipy.io
-import torch
-import torch.autograd as autograd
-from torch.autograd import Variable
-import torch.nn as nn
-import torch.nn.functional as F
-from dotmap import DotMap
 import pandas as pd
-import argparse
+import torch
+from tqdm import tqdm
 
-def get_config():
-    config = {
-        "dataset": "tmc",
-        "usetrain": True,
-    }
-    return config
+# 获取当前文件所在目录
+CURRENT_DIR = Path(__file__).parent
+NEIGHBOR_DATA_DIR = CURRENT_DIR / 'neighbor_data'
 
-def Load_Dataset(dataset):
-    # dataset = scipy.io.loadmat(filename)
-    absolute_path = os.path.abspath(os.getcwd())
-    data_path = absolute_path + '/../../datasets'
+# 创建目录
+NEIGHBOR_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-    train = pd.read_pickle("{}/{}/train.tfidf.df.pkl".format(data_path,dataset))
-    test = pd.read_pickle("{}/{}/test.tfidf.df.pkl".format(data_path,dataset))
-    cv = pd.read_pickle("{}/{}/cv.tfidf.df.pkl".format(data_path,dataset))
-    
-    # doc_bow = self.df.iloc[idx].bow
-    # doc_bow = torch.from_numpy(doc_bow.toarray().squeeze().astype(
-    #     np.float32))
-    # label = self.df.iloc[idx].label
 
-    # x_train = dataset['train']
-    # x_test = dataset['test']
-    # x_cv = dataset['cv']
-    # y_train = dataset['gnd_train']
-    # y_test = dataset['gnd_test']
-    # y_cv = dataset['gnd_cv']
+def get_argparser():
+    parser = argparse.ArgumentParser(description='生成文档邻居索引')
+    parser.add_argument('--dataset', type=str, default='ng20',
+                        help='数据集名称 (ng20, agnews, dbpedia, reuters, tmc, rcv1)')
+    parser.add_argument('--use_train', action='store_true', default=True,
+                        help='使用训练集作为查询语料')
+    parser.add_argument('--top_k', type=int, default=101,
+                        help='保存的邻居数量')
+    parser.add_argument('--query_batch_size', type=int, default=500,
+                        help='查询批大小')
+    parser.add_argument('--doc_batch_size', type=int, default=100,
+                        help='文档批大小')
+    parser.add_argument('--device', type=str, default='cuda',
+                        help='运行设备: cuda 或 cpu')
+    parser.add_argument('--gpu', type=str, default='0',
+                        help='指定 GPU 设备号')
+    return parser
 
-    # x_train = train.bow
-    # y_train = train.label
-    # print(y_train.tolist())
-    # exit()
-    # x_test = test.bow
-    # y_test = test.label
-    # x_cv = cv.bow
-    # y_cv = cv.label
-    
-    x_train = np.array([csr_data.toarray()[0] for csr_data in train.bow.tolist()])
-    x_test = np.array([csr_data.toarray()[0] for csr_data in train.bow.tolist()])
-    x_cv = np.array([csr_data.toarray()[0] for csr_data in train.bow.tolist()])
 
-    # x_test = dataset['test']
-    # x_cv = dataset['cv']
-    # y_train = dataset['gnd_train']
-    # y_test = dataset['gnd_test']
-    # y_cv = dataset['gnd_cv']
-    
-    data = DotMap()
-    # data.n_trains = y_train.shape[0]
-    # data.n_tests = y_test.shape[0]
-    # data.n_cv = y_cv.shape[0]
-    # data.n_tags = y_train.shape[1]
-    data.n_feas = x_train.shape[1]
-
-    ## Convert sparse to dense matricesimport numpy as np
-    train = x_train
-    nz_indices = np.where(np.sum(train, axis=1) > 0)[0]
-    train = train[nz_indices, :]
-    train_len = np.sum(train > 0, axis=1)
-    train_len = np.squeeze(np.asarray(train_len))
-
-    test = x_test
-    test_len = np.sum(test > 0, axis=1)
-    test_len = np.squeeze(np.asarray(test_len))
-
-    if x_cv is not None:
-        cv = x_cv
-        cv_len = np.sum(cv > 0, axis=1)
-        cv_len = np.squeeze(np.asarray(cv_len))
+def get_device(config):
+    """获取运行设备"""
+    if config['device'] == 'cuda' and torch.cuda.is_available():
+        os.environ['CUDA_VISIBLE_DEVICES'] = config['gpu']
+        device = torch.device('cuda')
+        print(f"使用 GPU: {config['gpu']}")
     else:
-        cv = None
-        cv_len = None
-        
-    # gnd_train = y_train[nz_indices, :]
-    # gnd_test = y_test
-    # gnd_cv = y_cv
+        device = torch.device('cpu')
+        print("使用 CPU")
+    return device
 
+
+def load_dataset(dataset_name):
+    """
+    加载数据集
+
+    Args:
+        dataset_name: 数据集名称
+
+    Returns:
+        包含训练集、测试集和验证集的数据对象
+    """
+    data_path = Path(__file__).parent.parent.parent / 'textdata'
+
+    train_df = pd.read_pickle(f"{data_path}/{dataset_name}/train.tfidf.df.pkl")
+    test_df = pd.read_pickle(f"{data_path}/{dataset_name}/test.tfidf.df.pkl")
+    cv_df = pd.read_pickle(f"{data_path}/{dataset_name}/cv.tfidf.df.pkl")
+
+    # 转换为numpy数组
+    train = np.array([csr_data.toarray()[0] for csr_data in train_df.bow.tolist()])
+    test = np.array([csr_data.toarray()[0] for csr_data in test_df.bow.tolist()])
+    cv = np.array([csr_data.toarray()[0] for csr_data in cv_df.bow.tolist()])
+
+    # 过滤空文档
+    train_len = np.sum(train > 0, axis=1)
+    nz_indices = np.where(train_len > 0)[0]
+    train = train[nz_indices, :]
+
+    class DataContainer:
+        pass
+
+    data = DataContainer()
     data.train = train
     data.test = test
     data.cv = cv
-    data.train_len = train_len
-    data.test_len = test_len
-    data.cv_len = cv_len
-    # data.gnd_train = gnd_train
-    # data.gnd_test = gnd_test
-    # data.gnd_cv = gnd_cv
-    
+    data.n_features = train.shape[1]
+
     return data
 
 
-def GetTopK_UsingCosineSim(outfn, queries, documents, TopK, queryBatchSize=10, docBatchSize=100):
-    
+def compute_topk_cosine_similarity(
+    out_fn,
+    queries,
+    documents,
+    top_k,
+    device,
+    query_batch_size=500,
+    doc_batch_size=100
+):
+    """
+    使用余弦相似度计算Top-K邻居并保存到文件
+
+    Args:
+        out_fn: 输出文件路径
+        queries: 查询文档矩阵
+        documents: 候选文档矩阵
+        top_k: 返回的邻居数量
+        device: 计算设备
+        query_batch_size: 查询批大小
+        doc_batch_size: 文档批大小
+    """
     n_docs = documents.shape[0]
     n_queries = queries.shape[0]
     query_row = 0
-    
-    with open(outfn, 'w') as out_fn:
-        for q_idx in tqdm(range(0, n_queries, queryBatchSize), desc='Query', ncols=0):
+
+    with open(out_fn, 'w') as out_file:
+        for q_idx in tqdm(range(0, n_queries, query_batch_size), desc='处理查询', ncols=0):
             query_batch_s_idx = q_idx
-            query_batch_e_idx = min(query_batch_s_idx + queryBatchSize, n_queries)
+            query_batch_e_idx = min(query_batch_s_idx + query_batch_size, n_queries)
 
-            # queryMats = torch.cuda.FloatTensor(queries[query_batch_s_idx:query_batch_e_idx].toarray())
-            queryMats = torch.cuda.FloatTensor(queries[query_batch_s_idx:query_batch_e_idx])
-            queryNorm2 = torch.norm(queryMats, 2, dim=1)
-            queryNorm2.unsqueeze_(1)
-            queryMats.unsqueeze_(2)
+            # 加载查询批次
+            query_mats = torch.FloatTensor(queries[query_batch_s_idx:query_batch_e_idx]).to(device)
+            query_norm = torch.norm(query_mats, 2, dim=1, keepdim=True)
+            query_mats_3d = query_mats.unsqueeze(2)
 
-            scoreList = []
-            indicesList = []
+            score_list = []
+            indices_list = []
 
-            #print('{}: perform cosine sim ...'.format(q_idx))
-            for idx in tqdm(range(0, n_docs, docBatchSize), desc='Doc', leave=False, ncols=0):
+            for idx in tqdm(range(0, n_docs, doc_batch_size), desc='文档', leave=False, ncols=0):
                 batch_s_idx = idx
-                batch_e_idx = min(batch_s_idx + docBatchSize, n_docs)
+                batch_e_idx = min(batch_s_idx + doc_batch_size, n_docs)
                 n_doc_in_batch = batch_e_idx - batch_s_idx
 
-                #if batch_s_idx > 1000:
-                #    break
+                # 加载候选文档批次
+                candidate_mats = torch.FloatTensor(documents[batch_s_idx:batch_e_idx]).to(device)
+                candidate_norm = torch.norm(candidate_mats, 2, dim=1, keepdim=True)
 
-                # candidateMats = torch.cuda.FloatTensor(documents[batch_s_idx:batch_e_idx].toarray())
-                candidateMats = torch.cuda.FloatTensor(documents[batch_s_idx:batch_e_idx])
+                # 准备用于批量矩阵乘法
+                candidate_mats_3d = candidate_mats.unsqueeze(2).permute(2, 1, 0)
 
-                candidateNorm2 = torch.norm(candidateMats, 2, dim=1)
-                candidateNorm2.unsqueeze_(0)
+                # 扩展维度以进行批量计算
+                query_expanded = query_mats_3d.expand(
+                    query_mats_3d.size(0),
+                    query_mats_3d.size(1),
+                    candidate_mats_3d.size(2)
+                )
+                candidate_expanded = candidate_mats_3d.expand_as(query_expanded)
 
-                candidateMats.unsqueeze_(2)
-                candidateMats = candidateMats.permute(2, 1, 0)
+                # 计算余弦相似度
+                cos_sim = torch.sum(query_expanded * candidate_expanded, dim=1) / (
+                    query_norm * candidate_norm.T + 1e-8
+                )
 
-                # compute cosine similarity
-                queryMatsExpand = queryMats.expand(queryMats.size(0), queryMats.size(1), candidateMats.size(2))
-                candidateMats = candidateMats.expand_as(queryMatsExpand)
+                # 获取当前批次的Top-K
+                k = min(top_k, n_doc_in_batch)
+                scores, indices = torch.topk(cos_sim, k, dim=1, largest=True)
 
-                cos_sim_scores = torch.sum(queryMatsExpand * candidateMats, dim=1) / (queryNorm2 * candidateNorm2)
+                del cos_sim
+                del query_expanded
+                del candidate_expanded
+                del candidate_norm
 
-                K = min(TopK, n_doc_in_batch)
-                scores, indices = torch.topk(cos_sim_scores, K, dim=1, largest=True)
+                score_list.append(scores)
+                indices_list.append(indices + batch_s_idx)
 
-                del cos_sim_scores
-                del queryMatsExpand
-                del candidateMats
-                del candidateNorm2
+            # 合并所有批次的结果
+            all_scores = torch.cat(score_list, dim=1)
+            all_indices = torch.cat(indices_list, dim=1)
+            _, sort_indices = torch.topk(all_scores, top_k, dim=1, largest=True)
 
-                scoreList.append(scores)
-                indicesList.append(indices + batch_s_idx)
+            topk_indices = torch.gather(all_indices, 1, sort_indices)
 
-            all_scores = torch.cat(scoreList, dim=1)
-            all_indices = torch.cat(indicesList, dim=1)
-            _, indices = torch.topk(all_scores, TopK, dim=1, largest=True)
+            del query_mats
+            del query_norm
+            del score_list
+            del indices_list
 
-            topK_indices = torch.gather(all_indices, 1, indices)
-            #all_topK_indices.append(topK_indices)
-            #all_topK_scores.append(scores)
-
-            del queryMats
-            del queryNorm2
-            del scoreList
-            del indicesList
-
-            topK_indices = topK_indices.cpu().numpy()
-            for row in topK_indices:
-                out_fn.write("{}:".format(query_row))
-                outtext = ','.join([str(col) for col in row])
-                out_fn.write(outtext)
-                out_fn.write('\n')
+            # 写入文件
+            topk_indices = topk_indices.cpu().numpy()
+            for row in topk_indices:
+                out_file.write(f"{query_row}:")
+                out_text = ','.join([str(col) for col in row])
+                out_file.write(out_text)
+                out_file.write('\n')
                 query_row += 1
 
             torch.cuda.empty_cache()
 
-#################################################################################################################
+
+def main():
+    argparser = get_argparser()
+    args = argparser.parse_args()
+    config = vars(args)
+
+    device = get_device(config)
+
+    dataset = config["dataset"]
+    use_train = config["use_train"]
+    top_k = config["top_k"]
+
+    print(f"加载数据集: {dataset}")
+    data = load_dataset(dataset)
+    print(f"训练集大小: {data.train.shape}")
+    print(f"特征维度: {data.n_features}")
+
+    if use_train:
+        print("使用训练集作为查询语料")
+        query_corpus = data.train
+        out_fn = NEIGHBOR_DATA_DIR / f"{dataset}_train_top{top_k}.txt"
+    else:
+        print("使用测试集作为查询语料")
+        query_corpus = data.test
+        out_fn = NEIGHBOR_DATA_DIR / f"{dataset}_test_top{top_k}.txt"
+
+    print(f"结果保存到: {out_fn}")
+
+    compute_topk_cosine_similarity(
+        str(out_fn),
+        query_corpus,
+        data.train,
+        top_k,
+        device,
+        query_batch_size=config["query_batch_size"],
+        doc_batch_size=config["doc_batch_size"]
+    )
+
+    print("完成!")
+
 
 if __name__ == "__main__":
-    config = get_config()
-    dataset = config["dataset"]
-    usetrain = config["usetrain"]    
-    data = Load_Dataset(dataset)
-    
-    # print("num train:{} num tests:{} num cv:{}".format(data.n_trains, data.n_tests, data.cv_len))
-
-    if usetrain:
-        print("use train as a query corpus")
-        query_corpus = data.train
-        out_fn = "./neighbor_data/{}_train_top101.txt".format(dataset)
-    else:
-        print("use test as a query corpus")
-        query_corpus = data.test
-        out_fn = "./neighbor_data/{}_test_top101.txt".format(dataset)
-
-    print("save the result to {}".format(out_fn))
-    GetTopK_UsingCosineSim(out_fn, query_corpus, data.train, TopK=101, queryBatchSize=500, docBatchSize=100)
+    main()
